@@ -51,3 +51,32 @@ run_dir=outputs/unirig_user25_20260917T103010Z
 `audit_run.py` 需要原始场景仍在输入清单记录的位置；`build_report.py` 需要准备好的点云、变换及标签。生成的 `report.html` 自包含点云和骨架，可离线查看；相对链接的 GLB/JSON 需与每例目录一起保存。
 
 归档 `setup/unirig_user25_gpu_20260917.tar.gz` 含完整输出及逐文件哈希，未包含大权重和完整预处理点云。具体指标和归档指纹见 [实验记录](../experiments/unirig/RESULTS.md)。
+
+## RigAnything / Puppeteer 准备与启动
+
+新增环境分别位于 `/root/autodl-tmp/envs/riganything`、`/root/autodl-tmp/envs/puppeteer`，从现有 UniRig 环境只读链接兼容依赖。源码和三份权重固定版本及 SHA-256，见 `UPSTREAM-rig-baselines.json` 和 `configs/rig-baselines.assets.lock.json`。依赖实际版本保存在 `setup/riganything-environment.freeze.txt`、`setup/puppeteer-environment.freeze.txt`。
+
+```bash
+cd /root/autodl-tmp/rigModel
+bash scripts/setup_rig_baselines.sh
+/root/autodl-tmp/envs/unirig/bin/python scripts/download_assets.py \
+  --lock configs/rig-baselines.assets.lock.json --endpoint https://hf-mirror.com
+for model in riganything puppeteer; do
+  /root/autodl-tmp/envs/$model/bin/python experiments/rig_baselines/prepare.py --model "$model"
+  OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /root/autodl-tmp/envs/$model/bin/python \
+    experiments/rig_baselines/preflight.py --model "$model"
+done
+```
+
+本轮上述准备已完成；Puppeteer 的完整预处理输入由本地 CPU 生成并回传，无需重新跑 SDF。`data/user25_riganything` 和 `data/user25_puppeteer` 各有 25 例；`setup/<model>-preflight.json` 的状态、输入哈希及源码身份必须匹配当前文件。原 AutoDL 先完成的 13 例保存在 `data/user25_puppeteer_autodl_cpu_partial_20260917`，无需删除。
+
+用户开启 GPU 后，依次运行两个单例，再运行完整批次：
+
+```bash
+bash scripts/run_rig_baselines.sh riganything --case 0001-antique-globe
+bash scripts/run_rig_baselines.sh puppeteer --case 0001-antique-globe
+bash scripts/run_rig_baselines.sh riganything
+bash scripts/run_rig_baselines.sh puppeteer
+```
+
+入口强制离线、重新校验模型权重、检查冻结输入，并保存到新的 `outputs/<model>_user25_<UTC时间戳>`。实际推理后会调用共用离线位置评分和输出坐标/场景审计。CPU 预检不包含网络前向；尤其 Puppeteer 的 FlashAttention 与 CUDA 兼容性需要首次开卡验证。详细适配及限制见 [说明](../experiments/rig_baselines/README.md)，已验证状态见 [记录](../experiments/rig_baselines/RESULTS.md)。

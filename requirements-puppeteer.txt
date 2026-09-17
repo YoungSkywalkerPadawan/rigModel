@@ -1,0 +1,11 @@
+# Skeleton inference and official marching-cubes preprocessing, not animation or skinning.
+transformers==4.46.1
+tokenizers==0.20.3
+accelerate==0.28.0
+trimesh==4.2.3
+easydict==1.13
+mesh2sdf==1.1.0
+scikit-image==0.24.0
+imageio==2.36.1
+tifffile==2024.9.20
+lazy-loader==0.4

@@ -28,8 +28,9 @@ def verify(path, item):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--endpoint', default='https://huggingface.co')
+    parser.add_argument('--lock', type=Path, default=ROOT / 'configs/assets.lock.json')
     args = parser.parse_args()
-    items = json.loads((ROOT / 'configs/assets.lock.json').read_text())['files']
+    items = json.loads(args.lock.read_text())['files']
     for item in items:
         path = ROOT / item['destination']
         path.parent.mkdir(parents=True, exist_ok=True)

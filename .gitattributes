@@ -5,3 +5,7 @@
 *.json text eol=lf
 *.yaml text eol=lf
 *.yml text eol=lf
+
+# Preserve the exact upstream blobs, including their original line endings and whitespace.
+third_party/RigAnything/** -text -whitespace
+third_party/Puppeteer/** -text -whitespace

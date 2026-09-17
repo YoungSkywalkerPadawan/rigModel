@@ -1,0 +1,28 @@
+{
+  "files": [
+    {
+      "repo_id": "Isabellaliu/RigAnything",
+      "revision": "30df7c0c390db1d5453c5af12da8d227c5025db6",
+      "filename": "riganything_ckpt.pt",
+      "destination": "models/riganything/riganything_ckpt.pt",
+      "bytes": 2344595770,
+      "sha256": "84c00971ed5c07f2906495bb4a23891058e7e1ee2afe687ada2011cd082a187a"
+    },
+    {
+      "repo_id": "Seed3D/Puppeteer",
+      "revision": "d83b1b73cd2e1507968d3eade2d6314082c82763",
+      "filename": "skeleton_ckpts/puppeteer_skeleton_w_diverse_pose.pth",
+      "destination": "models/puppeteer/puppeteer_skeleton_w_diverse_pose.pth",
+      "bytes": 4399390278,
+      "sha256": "2af9a75294b34adde314e20a3142e025925377f31637d232456fd09acb714b43"
+    },
+    {
+      "repo_id": "Maikou/Michelangelo",
+      "revision": "8a69a699a63f6876b2948b2d771f136bb7d5c066",
+      "filename": "checkpoints/aligned_shape_latents/shapevae-256.ckpt",
+      "destination": "models/puppeteer/shapevae-256.ckpt",
+      "bytes": 3934164973,
+      "sha256": "0391b81c36240e8f766fedf4265df599884193a5ef65354525074b9a00887454"
+    }
+  ]
+}

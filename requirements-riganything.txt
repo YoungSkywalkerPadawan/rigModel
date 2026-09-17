@@ -1,0 +1,2 @@
+# Inference core only; compatible CUDA packages are linked from the isolated UniRig environment.
+easydict==1.13
