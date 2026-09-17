@@ -35,3 +35,19 @@ bash scripts/run_gpu.sh
 每次使用独立时间戳目录，已有运行不会覆盖。单例失败有错误文件；全量运行逐例继续，汇总保存每次成功和失败。脚本默认调用独立离线 oracle 评分。预测文件与参考标签相互独立。
 
 本轮不自动开 GPU、不创建定时任务，也不在等待期间消耗 GPU 推理资源。
+
+## 运行后核验与报告
+
+2026-09-17 已完成单例及全部 25 例运行；无需为查看结果重新执行 GPU 推理。以下步骤只读取既有输出，在 CPU 上执行：
+
+```bash
+cd /root/autodl-tmp/rigModel
+run_dir=outputs/unirig_user25_20260917T103010Z
+/root/autodl-tmp/envs/unirig/bin/python experiments/unirig/audit_run.py --run "$run_dir"
+/root/autodl-tmp/envs/unirig/bin/python experiments/unirig/build_report.py --run "$run_dir" \
+  --v29-records /root/autodl-tmp/geometric-axis-eval-20260915/runs/cpu_v1/generic_v29/records
+```
+
+`audit_run.py` 需要原始场景仍在输入清单记录的位置；`build_report.py` 需要准备好的点云、变换及标签。生成的 `report.html` 自包含点云和骨架，可离线查看；相对链接的 GLB/JSON 需与每例目录一起保存。
+
+归档 `setup/unirig_user25_gpu_20260917.tar.gz` 含完整输出及逐文件哈希，未包含大权重和完整预处理点云。具体指标和归档指纹见 [实验记录](../experiments/unirig/RESULTS.md)。
