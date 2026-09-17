@@ -1,0 +1,8 @@
+# Linux / CPython 3.11. Install matching prebuilt wheels; no GPU is needed for installation.
+torch==2.4.1+cu124
+torchvision==0.19.1+cu124
+torchaudio==2.4.1+cu124
+flash-attn==2.7.3
+torch-scatter==2.1.2+pt24cu124
+torch-cluster==1.6.3+pt24cu124
+spconv-cu120==2.3.6

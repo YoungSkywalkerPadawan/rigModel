@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "repo_id": "VAST-AI/UniRig",
+      "revision": "36842e2b5947e9e60f89275b83208c8e74071c63",
+      "filename": "skeleton/articulation-xl_quantization_256/model.ckpt",
+      "destination": "models/unirig/model.ckpt",
+      "bytes": 1439617174,
+      "sha256": "d8cf9b42d56e7bc316d293597ecf8c4c39a8631cdd44a261ecf388242fabd0f4"
+    },
+    {
+      "repo_id": "facebook/opt-350m",
+      "revision": "08ab08cc4b72ff5593870b5d527cf4230323703c",
+      "filename": "config.json",
+      "destination": "models/opt-350m/config.json",
+      "bytes": 644,
+      "git_blob_sha1": "562d268bddb298d43b74a55c3197d1a011c473c4"
+    }
+  ]
+}

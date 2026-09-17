@@ -1,0 +1,15 @@
+# Skeleton-only adapter. Heavy CUDA packages are pinned in requirements-cuda.txt.
+transformers==4.51.3
+lightning==2.5.1
+pytorch-lightning==2.5.1
+python-box==7.3.2
+timm==1.0.15
+omegaconf==2.3.0
+addict==2.4.0
+fast-simplification==0.1.12
+numpy==1.26.4
+trimesh==4.12.2
+einops==0.8.2
+huggingface-hub==0.36.2
+requests
+accelerate==1.7.0
