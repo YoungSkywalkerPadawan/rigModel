@@ -9,8 +9,8 @@
 - **成功标准**：TODO；本轮先沿用子件尺度 1% / 2% 的探索性位置阈值，尚非产品验收标准。
 - **停止标准**：TODO。
 - **预计投入**：沿用 25 个既有持续旋转物体，新增 RigAnything / Puppeteer 两套预训练模型实验；后续投入 TODO。
-- **当前阶段**：UniRig 首轮 GPU 评估完成；RigAnything / Puppeteer 的源码、依赖、权重和各 25 例输入已准备，等待用户开 GPU 后单例验证。
-- **最新结论**：固定参考方向，UniRig 用真值挑选最佳节点也只有 7/65 根轴达到 1% 位置阈值；子件中心为 39/65，旧 v29 位置为 56/65。当前 UniRig 配置不足以替换已有原点方案；另两套模型尚无 GPU 推理和精度结果，不能提前判断效果。
+- **当前阶段**：三套预训练模型均完成同一批 25 物体 GPU 推理、65 轴评分和坐标核验；新增 RigAnything / Puppeteer 各 25/25 成功。
+- **最新结论**：固定参考方向，用真值选择最佳节点，UniRig / RigAnything / Puppeteer 在 1% 阈值分别覆盖 7/65、1/65、7/65；子件中心为 39/65，旧 v29 为 56/65。三模型联合仅覆盖 10/65，未补足 v29 的失败轴。当前预训练节点候选配置不足以替换已有原点方案；不据此决定整个研究方向结束。
 
 ## 本轮范围
 
@@ -38,7 +38,7 @@ bash scripts/run_gpu.sh
 
 ## 新增 RigAnything / Puppeteer
 
-两套适配复用首轮冻结的 25 物体 / 65 轴，分别采用各自官方输入预处理。三份权重共 10.68 GB 已下载到 AutoDL 并通过官方 SHA-256 校验。设计、依赖差异及命令见 [适配说明](experiments/rig_baselines/README.md)，CPU 检查结果与证据见 [准备记录](experiments/rig_baselines/RESULTS.md)。开 GPU 后先各跑一个物体，再执行全部 25 例。
+两套适配复用首轮冻结的 25 物体 / 65 轴，分别采用各自官方输入预处理。三份权重共 10.68 GB 已下载到 AutoDL 并通过官方 SHA-256 校验。设计、依赖差异及命令见 [适配说明](experiments/rig_baselines/README.md)，CPU 和 GPU 实际结果见 [实验记录](experiments/rig_baselines/RESULTS.md)。2026-09-18 已完成两个单例及两批完整推理；查看现有结果不需要重新开启 GPU。
 
 ```bash
 bash scripts/run_rig_baselines.sh riganything --case 0001-antique-globe
@@ -47,6 +47,20 @@ bash scripts/run_rig_baselines.sh puppeteer --case 0001-antique-globe
 bash scripts/run_rig_baselines.sh riganything
 bash scripts/run_rig_baselines.sh puppeteer
 ```
+
+## 三模型对比结果
+
+| 位置候选 | 误差 ≤ 1% | 误差 ≤ 2% |
+| --- | ---: | ---: |
+| UniRig 最佳节点 | 7/65 | 13/65 |
+| RigAnything 最佳节点 | 1/65 | 6/65 |
+| Puppeteer 最佳节点 | 7/65 | 17/65 |
+| 子件中心 | 39/65 | 49/65 |
+| 旧 v29 位置锚点 | 56/65 | 63/65 |
+
+模型节点由参考标签选取，属于候选覆盖上限，非自动关联准确率。误差按冻结子件尺度归一化；只评位置，不重新预测方向。
+
+本地完整归档位于 `outputs/baselines_user25_20260918/`；其中 `outputs/rig_comparison_user25_20260918/report.html` 可离线切换三个骨架、逐轴高亮最佳节点并下载叠加 GLB。报告生成器和复现命令见 [统一对比说明](experiments/rig_comparison/README.md)。本地运行产物被 Git 忽略，完整证据与 SHA-256 见 [GPU 实验记录](experiments/rig_baselines/RESULTS.md#2026-09-18gpu-推理与三模型对比)。
 
 ## 已完成的 GPU 实验
 

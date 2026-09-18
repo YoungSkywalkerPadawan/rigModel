@@ -54,6 +54,8 @@ run_dir=outputs/unirig_user25_20260917T103010Z
 
 ## RigAnything / Puppeteer 准备与启动
 
+2026-09-18 已完成两模型单例和完整 25 例，全部通过 GPU 前向及输出审计。当前只需查看已有结果，无需再次开 GPU。三模型交互报告生成命令见 [统一对比说明](../experiments/rig_comparison/README.md)，结果及归档指纹见 [GPU 记录](../experiments/rig_baselines/RESULTS.md#2026-09-18gpu-推理与三模型对比)。以下命令保留用于后续复现。
+
 新增环境分别位于 `/root/autodl-tmp/envs/riganything`、`/root/autodl-tmp/envs/puppeteer`，从现有 UniRig 环境只读链接兼容依赖。源码和三份权重固定版本及 SHA-256，见 `UPSTREAM-rig-baselines.json` 和 `configs/rig-baselines.assets.lock.json`。依赖实际版本保存在 `setup/riganything-environment.freeze.txt`、`setup/puppeteer-environment.freeze.txt`。
 
 ```bash
@@ -79,4 +81,4 @@ bash scripts/run_rig_baselines.sh riganything
 bash scripts/run_rig_baselines.sh puppeteer
 ```
 
-入口强制离线、重新校验模型权重、检查冻结输入，并保存到新的 `outputs/<model>_user25_<UTC时间戳>`。实际推理后会调用共用离线位置评分和输出坐标/场景审计。CPU 预检不包含网络前向；尤其 Puppeteer 的 FlashAttention 与 CUDA 兼容性需要首次开卡验证。详细适配及限制见 [说明](../experiments/rig_baselines/README.md)，已验证状态见 [记录](../experiments/rig_baselines/RESULTS.md)。
+入口强制离线、重新校验模型权重、检查冻结输入，并保存到新的 `outputs/<model>_user25_<UTC时间戳>`。实际推理后会调用共用离线位置评分和输出坐标/场景审计。CPU 预检不包含网络前向；本轮实际 GPU 前向已验证当前环境可执行，但不表示和另一套官方环境逐数值等价。详细适配及限制见 [说明](../experiments/rig_baselines/README.md)，已验证状态见 [记录](../experiments/rig_baselines/RESULTS.md)。

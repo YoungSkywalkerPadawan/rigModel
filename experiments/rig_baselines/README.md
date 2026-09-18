@@ -1,6 +1,6 @@
 # RigAnything / Puppeteer 机械轴位置候选实验
 
-沿用 UniRig 首轮已冻结的 25 个自有持续旋转物体、65 根参考轴，以及 `experiments/unirig/score.py` 的位置指标。每个整物体生成一次骨架；不输入参考轴、部件关联、关节类型或机械父子关系。两套模型都先完成 CPU 准备，用户开 GPU 后才运行。
+沿用 UniRig 首轮已冻结的 25 个自有持续旋转物体、65 根参考轴，以及 `experiments/unirig/score.py` 的位置指标。每个整物体生成一次骨架；不输入参考轴、部件关联、关节类型或机械父子关系。两套模型先完成 CPU 准备，用户开 GPU 后于 2026-09-18 完成单例及全量推理，各 25/25 成功。实际结果见 [RESULTS.md](RESULTS.md)。
 
 ## 模型与范围
 
@@ -27,7 +27,7 @@ Puppeteer 的 `save_utils.py` 同时导入 OpenGL 渲染器。适配通过 AST �
 
 AutoDL 根目录：`/root/autodl-tmp/rigModel`。两个独立 Python 3.11 venv：`/root/autodl-tmp/envs/riganything`、`/root/autodl-tmp/envs/puppeteer`；兼容的大依赖从已有 UniRig 环境只读链接。先安装新版本包，再链接其余依赖，避免修改旧环境。
 
-Puppeteer 固定官方要求的 Transformers 4.46.1 / Accelerate 0.28.0，但复用本机 PyTorch 2.4.1+cu124 / FlashAttention 2.7.3；这与论文的 PyTorch 2.1.1 / CUDA 11.8 不同。CPU 预检只能验证导入和参数结构，CUDA 内核及数值差异须在开卡后的单例烟测中验证。
+Puppeteer 固定官方要求的 Transformers 4.46.1 / Accelerate 0.28.0，但复用本机 PyTorch 2.4.1+cu124 / FlashAttention 2.7.3；这与论文的 PyTorch 2.1.1 / CUDA 11.8 不同。2026-09-18 的单例和 25 例实际 GPU 前向均已通过；尚未在另一套官方环境复跑做数值等价验证。
 
 本轮 Puppeteer SDF 输入使用 `prepare_local.py` 在本地两个 CPU 进程生成后回传，避免 AutoDL 半核 CPU 的长时间预处理。核心仍直接调用 `prepare.py` 中同一函数和官方 `MeshProcessor`；固定 NumPy 1.26.4、trimesh 4.2.3、mesh2sdf 1.1.0、scikit-image 0.24.0。本地 Python 为 3.12，AutoDL 推理环境为 3.11。已和 AutoDL 先行完成的 13 例逐数组对比，点坐标、法线与数值变换全部完全一致。
 
